@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import Navbar from "@/components/site-components/navbar";
+import Sidebar from "@/components/site-components/main-sidebar";
+import { SidebarProvider } from "@/contexts/sidebar-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,19 +27,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          storageKey="fynza-theme"
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+          <SidebarProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem={false}
+              storageKey="fynza-theme"
+            >
+              <div className="w-full overflow-x-hidden">
+                <div className="max-w-[90vw] mx-auto border-x-[1px] border-dashed border-gray-600/70 relative">
+                  <nav className="relative">
+                    <Navbar />
+                  </nav>
+                  <div>
+                    <Sidebar />
+                  </div>
+                  <main className="absolute left-[350px] top-24">
+                    {children}
+                  </main>
+                </div>
+              </div>
+            </ThemeProvider>
+          </SidebarProvider>
+        </body>
+      </html>
   );
 }
